@@ -2,136 +2,206 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pranav OS</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pranav OS V2</title>
 <style>
-* { box-sizing:border-box; }
-body {
-  margin:0; height:100vh; overflow:hidden;
-  font-family:Arial,sans-serif; color:white;
-  background:linear-gradient(135deg,#071a40,#135b92,#542e8b);
-}
-.desktop { padding:20px; display:grid;
-  grid-template-columns:repeat(2,90px); gap:20px; }
-.app { text-align:center; cursor:pointer; padding:10px 4px;
-  border-radius:12px; }
-.app:active,.app:hover {background:#ffffff30;}
-.app span {font-size:38px;display:block;margin-bottom:8px;}
-.window {
-  display:none; position:absolute; top:15%; left:5%;
-  width:90%; max-width:420px; height:55%;
-  background:#f1f5f9;color:#172033;
-  border-radius:14px;overflow:hidden;
-  box-shadow:0 10px 40px #0008;
-}
-.titlebar {background:#173b69;color:white;
-  padding:13px;display:flex;justify-content:space-between;}
-.titlebar button {background:#e34b59;color:white;
-  border:0;border-radius:5px;padding:5px 10px;}
-.content {padding:12px;height:calc(100% - 45px);}
-textarea {width:100%;height:100%;resize:none;
-  border:0;outline:none;background:transparent;font:16px Arial;}
-.calc {display:grid;grid-template-columns:repeat(4,1fr);
-  gap:7px;height:80%;}
-.calc button {font-size:20px;border:0;border-radius:8px;
-  background:#dce8f7;color:#172033;}
-#display {width:100%;height:45px;margin-bottom:10px;
-  font-size:25px;text-align:right;}
-.taskbar {position:absolute;bottom:0;width:100%;
-  height:55px;background:#07152de8;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 15px;backdrop-filter:blur(12px);}
-.start {border:0;border-radius:8px;padding:9px 13px;
-  background:#267be5;color:white;font-weight:bold;}
+*{box-sizing:border-box}
+body{margin:0;height:100dvh;overflow:hidden;font-family:Arial;
+color:white;background:linear-gradient(135deg,#071a40,#1765a2,#542e8b)}
+body[data-wall="sunset"]{background:linear-gradient(135deg,#ff9966,#7b4397)}
+body[data-wall="forest"]{background:linear-gradient(135deg,#134e5e,#71b280)}
+body[data-wall="dark"]{background:linear-gradient(135deg,#101010,#343434)}
+.desktop{padding:14px;display:grid;grid-template-columns:75px 75px;gap:10px}
+.app{padding:10px 3px;text-align:center;border-radius:10px;cursor:pointer;font-size:13px}
+.app:hover{background:#ffffff30}
+.app span{font-size:34px;display:block;margin-bottom:5px}
+.taskbar{position:absolute;bottom:0;left:0;width:100%;height:54px;
+background:#101827eF;display:flex;align-items:center;
+justify-content:space-between;padding:0 12px;z-index:100}
+button{cursor:pointer}
+.start{border:0;background:#267be5;color:white;border-radius:9px;padding:10px}
+#clock{font-size:13px}
+.window{display:none;position:absolute;top:12%;left:5%;width:90%;
+max-width:450px;height:65%;background:#f1f5f9;color:#172033;
+border-radius:12px;overflow:hidden;box-shadow:0 10px 40px #0009;z-index:10}
+.titlebar{height:43px;background:#173b69;color:white;padding:10px;
+display:flex;justify-content:space-between;align-items:center;touch-action:none;cursor:move}
+.close{border:0;border-radius:5px;background:#e34b59;color:white;padding:5px 10px}
+.content{height:calc(100% - 43px);padding:12px;overflow:auto}
+textarea{width:100%;height:calc(100% - 48px);resize:none;border:1px solid #ccd5e2;
+border-radius:8px;padding:10px;font:16px Arial;color:#172033}
+.action{background:#267be5;color:white;border:0;padding:9px 13px;border-radius:7px}
+#startmenu{display:none;position:absolute;bottom:60px;left:8px;
+width:220px;padding:12px;background:#172b48f5;border-radius:12px;z-index:110}
+.menuitem{padding:12px;border-radius:8px;cursor:pointer}
+.menuitem:hover{background:#ffffff25}
+.calcgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.calcgrid button{padding:14px 3px;border:0;border-radius:7px;background:#dce8f7;font-size:18px}
+#display{width:100%;padding:12px;font-size:23px;text-align:right;margin-bottom:10px}
+.file{padding:12px;border-bottom:1px solid #ccd5e2;cursor:pointer}
+.file:hover{background:#dce8f7}
+select{padding:10px;width:100%;margin:10px 0}
 </style>
 </head>
 <body>
 <div class="desktop">
-  <div class="app" onclick="openApp('notepad')">
-    <span>📝</span>Notepad
-  </div>
-  <div class="app" onclick="openApp('calculator')">
-    <span>🧮</span>Calculator
-  </div>
-  <div class="app" onclick="alert('Pranav OS File Manager coming soon!')">
-    <span>📁</span>Files
-  </div>
-  <div class="app" onclick="alert('Settings coming soon!')">
-    <span>⚙️</span>Settings
-  </div>
+ <div class="app" onclick="openApp('notes')"><span>📝</span>Notepad</div>
+ <div class="app" onclick="openApp('calc')"><span>🧮</span>Calculator</div>
+ <div class="app" onclick="openApp('files');showFiles()"><span>📁</span>Files</div>
+ <div class="app" onclick="openApp('settings')"><span>⚙️</span>Settings</div>
+ <div class="app" onclick="window.open('https://www.google.com','_blank')"><span>🌐</span>Browser</div>
 </div>
 
-<div class="window" id="notepad">
-  <div class="titlebar">📝 Notepad
-    <button onclick="closeApp('notepad')">✕</button>
-  </div>
-  <div class="content">
-    <textarea placeholder="Start typing..."></textarea>
-  </div>
+<div class="window" id="notes">
+ <div class="titlebar">📝 Notepad <button class="close" onclick="closeApp('notes')">✕</button></div>
+ <div class="content">
+  <input id="notename" placeholder="File name" value="My Notes"
+  style="padding:9px;width:100%;margin-bottom:8px">
+  <textarea id="note" placeholder="Start typing..."></textarea>
+  <button class="action" onclick="saveNote()">💾 Save Note</button>
+  <span id="saved"></span>
+ </div>
 </div>
 
-<div class="window" id="calculator">
-  <div class="titlebar">🧮 Calculator
-    <button onclick="closeApp('calculator')">✕</button>
+<div class="window" id="calc">
+ <div class="titlebar">🧮 Calculator <button class="close" onclick="closeApp('calc')">✕</button></div>
+ <div class="content">
+  <input id="display" readonly>
+  <div class="calcgrid">
+   <button onclick="clearCalc()">C</button><button onclick="add('(')">(</button>
+   <button onclick="add(')')">)</button><button onclick="add('/')">÷</button>
+   <button onclick="add('7')">7</button><button onclick="add('8')">8</button>
+   <button onclick="add('9')">9</button><button onclick="add('*')">×</button>
+   <button onclick="add('4')">4</button><button onclick="add('5')">5</button>
+   <button onclick="add('6')">6</button><button onclick="add('-')">−</button>
+   <button onclick="add('1')">1</button><button onclick="add('2')">2</button>
+   <button onclick="add('3')">3</button><button onclick="add('+')">+</button>
+   <button onclick="add('0')">0</button><button onclick="add('.')">.</button>
+   <button onclick="backspace()">⌫</button><button onclick="calculate()">=</button>
   </div>
-  <div class="content">
-    <input id="display" readonly>
-    <div class="calc">
-      <button onclick="add('7')">7</button>
-      <button onclick="add('8')">8</button>
-      <button onclick="add('9')">9</button>
-      <button onclick="add('/')">÷</button>
-      <button onclick="add('4')">4</button>
-      <button onclick="add('5')">5</button>
-      <button onclick="add('6')">6</button>
-      <button onclick="add('*')">×</button>
-      <button onclick="add('1')">1</button>
-      <button onclick="add('2')">2</button>
-      <button onclick="add('3')">3</button>
-      <button onclick="add('-')">−</button>
-      <button onclick="add('0')">0</button>
-      <button onclick="add('.')">.</button>
-      <button onclick="calculate()">=</button>
-      <button onclick="add('+')">+</button>
-      <button onclick="clearCalc()" style="grid-column:span 4">Clear</button>
-    </div>
-  </div>
+ </div>
+</div>
+
+<div class="window" id="files">
+ <div class="titlebar">📁 File Manager <button class="close" onclick="closeApp('files')">✕</button></div>
+ <div class="content">
+  <h3>My Files</h3><div id="filelist"></div>
+ </div>
+</div>
+
+<div class="window" id="settings">
+ <div class="titlebar">⚙️ Settings <button class="close" onclick="closeApp('settings')">✕</button></div>
+ <div class="content">
+  <h3>Personalization</h3>
+  <p>Choose your desktop wallpaper</p>
+  <select id="wall" onchange="setWall(this.value)">
+   <option value="blue">Ocean Blue</option>
+   <option value="sunset">Sunset</option>
+   <option value="forest">Forest</option>
+   <option value="dark">Dark</option>
+  </select>
+  <p>Pranav OS V2</p>
+  <p>Created by Pranav PV</p>
+ </div>
+</div>
+
+<div id="startmenu">
+ <h3>🪟 Pranav OS</h3>
+ <div class="menuitem" onclick="launch('notes')">📝 Notepad</div>
+ <div class="menuitem" onclick="launch('calc')">🧮 Calculator</div>
+ <div class="menuitem" onclick="launch('files')">📁 File Manager</div>
+ <div class="menuitem" onclick="launch('settings')">⚙️ Settings</div>
+ <div class="menuitem" onclick="location.reload()">↻ Restart</div>
 </div>
 
 <div class="taskbar">
-  <button class="start" onclick="alert('Welcome to Pranav OS!')">
-    🪟 Pranav OS
-  </button>
-  <span id="clock"></span>
+ <button class="start" onclick="toggleStart()">🪟 Start</button>
+ <span>Pranav OS</span>
+ <span id="clock"></span>
 </div>
 
 <script>
-function openApp(id) {
-  document.getElementById(id).style.display='block';
+function openApp(id){
+ let w=document.getElementById(id);
+ w.style.display='block';
+ w.style.zIndex=10+Date.now()%80;
+ document.getElementById('startmenu').style.display='none';
 }
-function closeApp(id) {
-  document.getElementById(id).style.display='none';
+function closeApp(id){document.getElementById(id).style.display='none'}
+function launch(id){openApp(id);if(id==='files')showFiles()}
+function toggleStart(){
+ let m=document.getElementById('startmenu');
+ m.style.display=m.style.display==='block'?'none':'block';
 }
-function add(value) {
-  document.getElementById('display').value += value;
+function saveNote(){
+ let name=document.getElementById('notename').value.trim()||'My Notes';
+ let notes=JSON.parse(localStorage.getItem('pranav_notes')||'{}');
+ notes[name]=document.getElementById('note').value;
+ localStorage.setItem('pranav_notes',JSON.stringify(notes));
+ document.getElementById('saved').textContent=' Saved!';
+ showFiles();
 }
-function clearCalc() {
-  document.getElementById('display').value='';
+function showFiles(){
+ let notes=JSON.parse(localStorage.getItem('pranav_notes')||'{}');
+ let list=document.getElementById('filelist');
+ list.innerHTML='';
+ Object.keys(notes).forEach(name=>{
+  let item=document.createElement('div');
+  item.className='file';
+  item.textContent='📄 '+name;
+  item.onclick=()=>{
+   document.getElementById('notename').value=name;
+   document.getElementById('note').value=notes[name];
+   openApp('notes');
+  };
+  list.appendChild(item);
+ });
+ if(!Object.keys(notes).length)list.textContent='No saved notes yet.';
 }
-function calculate() {
-  const d=document.getElementById('display');
-  if(!/^[0-9+\-*/.() ]+$/.test(d.value)) return;
-  try {
-    const result=Function('"use strict";return ('+d.value+')')();
-    d.value=Number.isFinite(result)?result:'Error';
-  } catch { d.value='Error'; }
+function setWall(value){
+ document.body.dataset.wall=value;
+ localStorage.setItem('pranav_wall',value);
 }
-function updateClock() {
-  document.getElementById('clock').textContent =
-    new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+let wall=localStorage.getItem('pranav_wall')||'blue';
+setWall(wall);
+document.getElementById('wall').value=wall;
+function add(v){document.getElementById('display').value+=v}
+function clearCalc(){document.getElementById('display').value=''}
+function backspace(){
+ let d=document.getElementById('display');d.value=d.value.slice(0,-1);
 }
-updateClock();
-setInterval(updateClock,1000);
+function calculate(){
+ let d=document.getElementById('display');
+ if(!/^[0-9+\-*/.() ]+$/.test(d.value))return;
+ try{
+  let result=Function('"use strict";return ('+d.value+')')();
+  d.value=Number.isFinite(result)?result:'Error';
+ }catch{d.value='Error'}
+}
+function clock(){
+ document.getElementById('clock').textContent=
+ new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+}
+clock();setInterval(clock,1000);
+
+// Drag windows with touch or mouse
+document.querySelectorAll('.window').forEach(win=>{
+ let bar=win.querySelector('.titlebar'),sx,sy,ox,oy,drag=false;
+ bar.addEventListener('pointerdown',e=>{
+  if(e.target.closest('button'))return;
+  drag=true;bar.setPointerCapture(e.pointerId);
+  sx=e.clientX;sy=e.clientY;
+  let r=win.getBoundingClientRect();ox=r.left;oy=r.top;
+ });
+ bar.addEventListener('pointermove',e=>{
+  if(!drag)return;
+  win.style.left=Math.max(0,Math.min(innerWidth-win.offsetWidth,
+   ox+e.clientX-sx))+'px';
+  win.style.top=Math.max(0,Math.min(innerHeight-65,
+   oy+e.clientY-sy))+'px';
+ });
+ bar.addEventListener('pointerup',()=>drag=false);
+});
 </script>
 </body>
 </html>
