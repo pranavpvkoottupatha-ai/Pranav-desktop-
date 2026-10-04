@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pranav OS</title>
+<style>
+* { box-sizing:border-box; }
+body {
+  margin:0; height:100vh; overflow:hidden;
+  font-family:Arial,sans-serif; color:white;
+  background:linear-gradient(135deg,#071a40,#135b92,#542e8b);
+}
+.desktop { padding:20px; display:grid;
+  grid-template-columns:repeat(2,90px); gap:20px; }
+.app { text-align:center; cursor:pointer; padding:10px 4px;
+  border-radius:12px; }
+.app:active,.app:hover {background:#ffffff30;}
+.app span {font-size:38px;display:block;margin-bottom:8px;}
+.window {
+  display:none; position:absolute; top:15%; left:5%;
+  width:90%; max-width:420px; height:55%;
+  background:#f1f5f9;color:#172033;
+  border-radius:14px;overflow:hidden;
+  box-shadow:0 10px 40px #0008;
+}
+.titlebar {background:#173b69;color:white;
+  padding:13px;display:flex;justify-content:space-between;}
+.titlebar button {background:#e34b59;color:white;
+  border:0;border-radius:5px;padding:5px 10px;}
+.content {padding:12px;height:calc(100% - 45px);}
+textarea {width:100%;height:100%;resize:none;
+  border:0;outline:none;background:transparent;font:16px Arial;}
+.calc {display:grid;grid-template-columns:repeat(4,1fr);
+  gap:7px;height:80%;}
+.calc button {font-size:20px;border:0;border-radius:8px;
+  background:#dce8f7;color:#172033;}
+#display {width:100%;height:45px;margin-bottom:10px;
+  font-size:25px;text-align:right;}
+.taskbar {position:absolute;bottom:0;width:100%;
+  height:55px;background:#07152de8;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 15px;backdrop-filter:blur(12px);}
+.start {border:0;border-radius:8px;padding:9px 13px;
+  background:#267be5;color:white;font-weight:bold;}
+</style>
+</head>
+<body>
+<div class="desktop">
+  <div class="app" onclick="openApp('notepad')">
+    <span>📝</span>Notepad
+  </div>
+  <div class="app" onclick="openApp('calculator')">
+    <span>🧮</span>Calculator
+  </div>
+  <div class="app" onclick="alert('Pranav OS File Manager coming soon!')">
+    <span>📁</span>Files
+  </div>
+  <div class="app" onclick="alert('Settings coming soon!')">
+    <span>⚙️</span>Settings
+  </div>
+</div>
+
+<div class="window" id="notepad">
+  <div class="titlebar">📝 Notepad
+    <button onclick="closeApp('notepad')">✕</button>
+  </div>
+  <div class="content">
+    <textarea placeholder="Start typing..."></textarea>
+  </div>
+</div>
+
+<div class="window" id="calculator">
+  <div class="titlebar">🧮 Calculator
+    <button onclick="closeApp('calculator')">✕</button>
+  </div>
+  <div class="content">
+    <input id="display" readonly>
+    <div class="calc">
+      <button onclick="add('7')">7</button>
+      <button onclick="add('8')">8</button>
+      <button onclick="add('9')">9</button>
+      <button onclick="add('/')">÷</button>
+      <button onclick="add('4')">4</button>
+      <button onclick="add('5')">5</button>
+      <button onclick="add('6')">6</button>
+      <button onclick="add('*')">×</button>
+      <button onclick="add('1')">1</button>
+      <button onclick="add('2')">2</button>
+      <button onclick="add('3')">3</button>
+      <button onclick="add('-')">−</button>
+      <button onclick="add('0')">0</button>
+      <button onclick="add('.')">.</button>
+      <button onclick="calculate()">=</button>
+      <button onclick="add('+')">+</button>
+      <button onclick="clearCalc()" style="grid-column:span 4">Clear</button>
+    </div>
+  </div>
+</div>
+
+<div class="taskbar">
+  <button class="start" onclick="alert('Welcome to Pranav OS!')">
+    🪟 Pranav OS
+  </button>
+  <span id="clock"></span>
+</div>
+
+<script>
+function openApp(id) {
+  document.getElementById(id).style.display='block';
+}
+function closeApp(id) {
+  document.getElementById(id).style.display='none';
+}
+function add(value) {
+  document.getElementById('display').value += value;
+}
+function clearCalc() {
+  document.getElementById('display').value='';
+}
+function calculate() {
+  const d=document.getElementById('display');
+  if(!/^[0-9+\-*/.() ]+$/.test(d.value)) return;
+  try {
+    const result=Function('"use strict";return ('+d.value+')')();
+    d.value=Number.isFinite(result)?result:'Error';
+  } catch { d.value='Error'; }
+}
+function updateClock() {
+  document.getElementById('clock').textContent =
+    new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+}
+updateClock();
+setInterval(updateClock,1000);
+</script>
+</body>
+</html>
